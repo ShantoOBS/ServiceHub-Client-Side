@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 export default function Hero() {
   return (
     <section
-      className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-4 py-20 sm:py-28 lg:py-32"
+      className="relative flex sm:min-h-[80vh] min-h-[60vh] flex-col items-center justify-center overflow-hidden px-4 py-5 sm:py-10 lg:py-20"
       style={{
         backgroundImage: 'url(/assets/Common/Hero-bg.webp)',
         backgroundSize: 'cover',
