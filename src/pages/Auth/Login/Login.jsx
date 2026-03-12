@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import useAuth from '../../../Hook/useAuth'
+import RevealOnScroll from '../../../components/RevealOnScroll'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -26,7 +27,8 @@ export default function Login() {
 
   return (
     <main className="flex min-h-[80vh] items-center justify-center bg-[#f3f4f6] px-4 py-5">
-      <div className="w-full max-w-md rounded-3xl bg-white/90 p-6 shadow-lg backdrop-blur-sm sm:p-8">
+      <RevealOnScroll className="w-full max-w-md">
+        <div className="w-full rounded-3xl bg-white/90 p-6 shadow-lg sm:p-8">
         <div className="mb-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#16a34a]">
             Welcome back
@@ -119,7 +121,8 @@ export default function Login() {
             ← Back to home
           </Link>
         </p>
-      </div>
+        </div>
+      </RevealOnScroll>
     </main>
   )
 }

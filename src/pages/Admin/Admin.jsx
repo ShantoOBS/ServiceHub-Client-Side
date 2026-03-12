@@ -127,7 +127,7 @@ export default function Admin() {
   }
 
   return (
-    <main className="min-h-[70vh] bg-[#f3f4f6] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-[70vh] bg-[#f3f4f6] px-4 py-5">
       <section className="mx-auto max-w-6xl">
         <header className="mb-6 sm:mb-8">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#16a34a]">
