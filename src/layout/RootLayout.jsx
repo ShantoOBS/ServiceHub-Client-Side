@@ -1,5 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router'
+import { Toaster } from 'sonner'
 import Navbar from '../pages/Common/Navbar/Navbar'
 import Footer from '../pages/Common/Footer/Footer'
 
@@ -11,6 +12,7 @@ export default function RootLayout() {
         <Outlet />
       </div>
       <Footer />
+      <Toaster position="top-center" richColors closeButton />
     </div>
   )
 }

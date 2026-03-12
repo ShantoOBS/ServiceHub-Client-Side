@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
+import { toast } from 'sonner'
 import useAuth from '../../../Hook/useAuth'
+import useAxios from '../../../Hook/useAxios'
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const { registerUser } = useAuth() || {}
+  const axios = useAxios()
 
   const togglePassword = () => setShowPassword((prev) => !prev)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const email = formData.get('email')
@@ -18,13 +21,20 @@ export default function Register() {
 
     if (!registerUser) return
 
-    registerUser(email, password)
-      .then(() => {
-        navigate(location.state || '/')
-      })
-      .catch(() => {
-        // handle error later (e.g. toast)
-      })
+    try {
+      // Create auth account in Firebase
+      await registerUser(email, password)
+
+      // Create / upsert user in backend usersCollection
+      await axios.post('/users', { email })
+
+      toast.success('Account created successfully.')
+      navigate(location.state || '/')
+    } catch (err) {
+      const message =
+        err?.response?.data?.message || 'Registration failed. Please try again.'
+      toast.error(message)
+    }
   }
 
   return (

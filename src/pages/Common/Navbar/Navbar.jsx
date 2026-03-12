@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router'
 import useAuth from '../../../Hook/useAuth'
+import useRole from '../../../Hook/useRole'
 
 const iconClass = 'h-5 w-5 shrink-0'
 
@@ -40,6 +41,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user, logOut } = useAuth() || {}
   const isLoggedIn = !!user
+  const { role } = useRole()
+ 
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/'
@@ -50,7 +53,7 @@ export default function Navbar() {
     'rounded-full px-4 py-2 text-gray-500 transition-colors hover:text-[#1f8e6b] hover:bg-gray-100'
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-transparent backdrop-blur-sm  max-w-7xl mx-auto">
+    <header className="sticky top-0 z-50 w-full max-w-7xl mx-auto bg-transparent backdrop-blur-sm">
       <nav className="flex h-16 w-full items-center justify-between gap-4 px-4 ">
         {/* Left: Logo only */}
         <div className="flex shrink-0 items-center">
@@ -68,17 +71,21 @@ export default function Navbar() {
 
         {/* Center: Home, Services, My Booking, Admin */}
         <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:flex md:items-center md:gap-1">
-          {navLinks.map(({ to, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex items-center gap-1 ${navLinkClass} ${isActive(to) ? 'font-bold text-[#1f8e6b] bg-gray-100 px-4 py-2 rounded-full' : ''
+          {navLinks.map(({ to, label }) => {
+            if (label === 'Admin' && role !== 'admin') return null
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`flex items-center gap-1 ${navLinkClass} ${
+                  isActive(to) ? 'font-bold text-[#1f8e6b] bg-gray-100 px-4 py-2 rounded-full' : ''
                 }`}
-            >
-              {navLinkIcons[label]}
-              {label}
-            </Link>
-          ))}
+              >
+                {navLinkIcons[label]}
+                {label}
+              </Link>
+            )
+          })}
         </div>
 
         {/* Right: Login + Book Now (or profile + Logout when logged in) */}
@@ -88,7 +95,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={logOut}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#176E84] focus:ring-offset-2"
+               className={`hidden sm:inline-block ${navLinkClass} py-2`}
               >
                 Logout
               </button>
@@ -148,60 +155,47 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu panel */}
+      {/* Mobile menu panel - overlays content, no extra space */}
       {isMenuOpen && (
         <div
-          className="border-t border-slate-200/50 bg-white/95 backdrop-blur-sm md:hidden"
+          className="absolute top-full left-0 right-0 z-50 border-t border-slate-200/50 bg-white/95 shadow-lg backdrop-blur-sm md:hidden"
           role="dialog"
           aria-label="Mobile navigation"
         >
           <div className="flex flex-col gap-0 px-4 py-3">
-            {navLinks.map(({ to, label }) => (
-              <Link
-                key={to}
-                to={to}
-                onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${isActive(to)
-                    ? 'bg-[#F5F5F5] font-bold text-black'
-                    : 'text-[#4A4A4A] hover:bg-[#F5F5F5] hover:font-bold hover:text-black'
+            {navLinks.map(({ to, label }) => {
+              if (label === 'Admin' && role !== 'admin') return null
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
+                    isActive(to)
+                      ? 'bg-[#F5F5F5] font-bold text-black'
+                      : 'text-[#4A4A4A] hover:bg-[#F5F5F5] hover:font-bold hover:text-black'
                   }`}
-              >
-                {navLinkIcons[label]}
-                {label}
-              </Link>
-            ))}
+                >
+                  {navLinkIcons[label]}
+                  {label}
+                </Link>
+              )
+            })}
             {!isLoggedIn && (
               <div className="mt-3 flex flex-col gap-2 border-t border-slate-200 pt-3">
                 <Link
                   to="/login"
                   onClick={() => setIsMenuOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-black hover:bg-slate-50"
+                  className="ml-auto rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-black hover:bg-slate-100"
                 >
                   Login
                 </Link>
-                <Link
-                  to="/services"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1e7446] px-4 py-2.5 text-sm font-medium text-[#c7e9a7] transition-opacity hover:opacity-90"
-                >
-                  <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Book A Service
-                </Link>
+             
               </div>
             )}
             {isLoggedIn && (
               <div className="mt-3 flex items-center gap-3 border-t border-slate-200 pt-3">
-                <img
-                  src={user.avatar || '/assets/Common/logo.png'}
-                  alt=""
-                  className="h-9 w-9 rounded-full object-cover"
-                />
-                <span className="text-sm font-medium text-black">
-                  {user.name}
-                </span>
+              
                 <button
                   type="button"
                   onClick={() => {
