@@ -2,6 +2,8 @@
 
 ServiceHub is a modern, responsive web app for booking home services such as AC repair, plumbing, cleaning, and electrical maintenance. Users can browse services, create bookings, pay securely with Stripe, and receive confirmation emails. Admins can manage users, review all bookings, and confirm paid requests.
 
+**Live demo**: [`https://fix-now-client.vercel.app/`](https://fix-now-client.vercel.app/)
+
 ---
 
 ### Tech stack
