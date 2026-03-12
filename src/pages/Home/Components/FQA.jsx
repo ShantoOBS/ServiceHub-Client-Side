@@ -38,7 +38,7 @@ export default function FQA() {
 
   return (
     <section className="bg-[#FAFAF] py-5 sm:py-10 ">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 ">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
           {/* Left: Heading */}
           <div>

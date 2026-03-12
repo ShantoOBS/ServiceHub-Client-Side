@@ -34,7 +34,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto w-full border-t border-slate-200 bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 ">
         <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:gap-16">
           {/* Left: Logo, Social, Copyright */}
           <div className="flex flex-col gap-6">

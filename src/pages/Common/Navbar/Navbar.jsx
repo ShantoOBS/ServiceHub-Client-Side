@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router'
+import useAuth from '../../../Hook/useAuth'
 
 const iconClass = 'h-5 w-5 shrink-0'
 
@@ -37,11 +38,8 @@ const navLinks = [
 export default function Navbar() {
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [user] = useState({
-    name: 'User',
-    avatar: null,
-  })
+  const { user, logOut } = useAuth() || {}
+  const isLoggedIn = !!user
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/'
@@ -49,11 +47,11 @@ export default function Navbar() {
   }
 
   const navLinkClass =
-    'rounded-full px-4 py-2 text-[#4A4A4A] transition-colors hover:bg-[#F5F5F5] hover:text-black hover:font-bold focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2'
+    'rounded-full px-4 py-2 text-gray-500 transition-colors hover:text-[#1f8e6b] hover:bg-gray-100'
 
   return (
     <header className="sticky top-0 z-50 w-full bg-transparent backdrop-blur-sm  max-w-7xl mx-auto">
-      <nav className="flex h-16 w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <nav className="flex h-16 w-full items-center justify-between gap-4 px-4 ">
         {/* Left: Logo only */}
         <div className="flex shrink-0 items-center">
           <Link
@@ -74,7 +72,8 @@ export default function Navbar() {
             <Link
               key={to}
               to={to}
-              className={`flex items-center gap-1 ${navLinkClass} ${isActive(to) ? 'text-[#176E84] font-bold' : 'text-[#176E84]'}`}
+              className={`flex items-center gap-1 ${navLinkClass} ${isActive(to) ? 'font-bold text-[#1f8e6b] bg-gray-100 px-4 py-2 rounded-full' : ''
+                }`}
             >
               {navLinkIcons[label]}
               {label}
@@ -86,33 +85,9 @@ export default function Navbar() {
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
           {isLoggedIn ? (
             <>
-              <div className="hidden items-center gap-2 sm:flex">
-                <span className="text-sm font-medium text-black">
-                  {user.name}
-                </span>
-                <Link
-                  to="/profile"
-                  className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-[#176E84] focus:ring-offset-2"
-                  aria-label="Profile"
-                >
-                  {user.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <img
-                      src="/assets/Common/logo.png"
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  )}
-                </Link>
-              </div>
               <button
                 type="button"
-                onClick={() => setIsLoggedIn(false)}
+                onClick={logOut}
                 className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#176E84] focus:ring-offset-2"
               >
                 Logout
@@ -126,26 +101,28 @@ export default function Navbar() {
               >
                 Login
               </Link>
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 rounded-2xl bg-[#1e7446] px-5 py-2.5 text-sm font-medium text-[#c7e9a7] transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#1e7446] focus:ring-offset-2"
-              >
-              
-                Book A Service
-              </Link>
+
             </>
           )}
+
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 rounded-full bg-[#22c55e] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#16a34a] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#1e7446] focus:ring-offset-2"
+          >
+
+            Book A Service
+          </Link>
 
           {/* Mobile menu button */}
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-black hover:bg-slate-100 md:hidden focus:outline-none focus:ring-2 focus:ring-[#176E84] focus:ring-offset-2"
+            className="inline-flex h-14 w-14 items-center justify-center rounded-lg text-black hover:bg-slate-100 md:hidden "
             aria-expanded={isMenuOpen}
             aria-label="Toggle menu"
           >
             <svg
-              className="h-6 w-6"
+              className="h-7 w-7"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -184,11 +161,10 @@ export default function Navbar() {
                 key={to}
                 to={to}
                 onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
-                  isActive(to)
+                className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${isActive(to)
                     ? 'bg-[#F5F5F5] font-bold text-black'
                     : 'text-[#4A4A4A] hover:bg-[#F5F5F5] hover:font-bold hover:text-black'
-                }`}
+                  }`}
               >
                 {navLinkIcons[label]}
                 {label}
@@ -229,7 +205,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => {
-                    setIsLoggedIn(false)
+                    logOut?.()
                     setIsMenuOpen(false)
                   }}
                   className="ml-auto rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-black hover:bg-slate-100"

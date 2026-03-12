@@ -4,9 +4,11 @@ import Home from "../pages/Home/Home";
 import Services from "../pages/Services/Services";
 import MyBooking from "../pages/MyBooking/MyBooking";
 import Admin from "../pages/Admin/Admin";
-import Login from "../pages/Login/Login";
+import Login from "../pages/Auth/Login/Login";
+import Register from "../pages/Auth/Register/Register";
 import Profile from "../pages/Profile/Profile";
 import Demo from "../pages/Demo/Demo";
+import NotFound from "../pages/NotFound/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -18,8 +20,10 @@ export const router = createBrowserRouter([
       { path: "my-booking", element: <MyBooking /> },
       { path: "admin", element: <Admin /> },
       { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
       { path: "profile", element: <Profile /> },
       { path: "demo", element: <Demo /> },
     ],
   },
+  { path: "*", element: <NotFound /> },
 ]);

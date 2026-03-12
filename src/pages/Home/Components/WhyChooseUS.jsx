@@ -58,7 +58,7 @@ export default function WhyChooseUS() {
       className="w-full py-5 sm:py-10 "
       style={{ backgroundColor: '#FAFAFA' }}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 ">
         {/* Subtitle */}
         <div className="flex items-center gap-3">
           <span className="h-px w-8 bg-slate-400" aria-hidden />
