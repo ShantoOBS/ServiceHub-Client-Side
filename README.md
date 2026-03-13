@@ -48,7 +48,7 @@ ServiceHub is a modern, responsive web app for booking home services such as AC 
 
 #### 1. Admin role
 
-- **Email**: `admin@gamil.com`  
+- **Email**: `admin@gmail.com`  
 - **Password**: `123456`
 
 Flow:
